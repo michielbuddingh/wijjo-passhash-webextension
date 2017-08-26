@@ -1,0 +1,40 @@
+{
+    "name": "password-hasher-compatible",
+    "author" : "Michiel Buddingh",
+
+    "developer" : {
+	"name" : "Michiel Buddingh",
+	"url": "https://github.com/michielbuddingh"
+    },
+    "description": "Hashes passwords in a way that's identical to wijjo's passhash extension",
+    "manifest_version": 2,
+
+    "version": "0.8",
+    "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/latest-download",
+    "icons": {
+	"24": "icons/icon.svg",
+	"48": "icons/icon.svg",
+	"96": "icons/icon.svg",
+	"128" : "icons/icon.svg"
+    },
+
+    "content_security_policy" : "default-src 'self'",
+    "incognito" : "split",
+
+    "permissions": [
+	"activeTab",
+	"storage"
+    ],
+
+    "options_ui": {
+	"page": "options/options.html",
+	"browser_style": true
+    },
+
+    "browser_action": {
+	"browser_style": true,
+	"default_icon": "icons/icon.svg",
+	"default_title": "Hash password",
+	"default_popup": "popup/hash_password.html"
+    }
+}
