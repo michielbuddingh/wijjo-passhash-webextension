@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+
+<body>
+  <form>
+      <!-- <label>Favourite colour</label> -->
+      <!-- <input type="text" id="colour" > -->
+      <!-- <button type="submit">Save</button> -->
+
+      <div class="panel">
+	<div class="panel-section panel-section-header">
+	  <div class="text-section-header">Size</div>
+	</div>
+
+	<div class="panel-section panel-section-formElements">
+
+	  <div class="checkboxItem">
+	    <input id="generated-size" type="number" min="4" max="26" step="2" value ="8"/>
+	    <label for="generated-size">Size of generated password</label>
+	  </div>
+	</div>
+      </div>
+
+      <div class="panel">
+	<div class="panel-section panel-section-header">
+	  <div class="text-section-header">Requirements</div>
+	</div>
+
+	<div class="panel-section panel-section-formElements">
+	  <div class="checkboxItem">
+	    <input type="checkbox" id="at-least-one-digit" />
+	    <label for="at-least-one-digit">At least one digit</label>
+	  </div>
+	  <div class="checkboxItem">
+	    <input type="checkbox" id="at-least-one-punctuation-character" />
+	    <label for="at-least-one-punctuation-character">At least one punctuation character</label>
+	  </div>
+
+	  <div class="checkboxItem">
+	    <input type="checkbox" id="both-upper-and-lower-case-letters" />
+	    <label for="both-upper-and-lower-case-letters">Both upper and lower-case letters</label>
+	  </div>
+	</div>
+      </div>
+
+      <div class="panel">
+	<div class="panel-section panel-section-header">
+	  <div class="text-section-header">Restrictions</div>
+	</div>
+
+	<div class="panel-section panel-section-formElements">
+	  <div class="checkboxItem">
+	    <input type="checkbox" id="no-special-characters" />
+	    <label for="no-special-characters">No special characters</label>
+	  </div>
+
+	  <div class="checkboxItem">
+	    <input type="checkbox" id="digits-only" />
+	    <label for="digits-only">Digits only</label>
+	  </div>
+	</div>
+
+      </div>
+
+
+
+  </form>
+  <script src="options.js"></script>
+</body>
+
+</html>
