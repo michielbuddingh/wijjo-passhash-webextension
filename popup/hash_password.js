@@ -6,6 +6,8 @@ const masterKeyInput = document.querySelector("#masterkey");
 const siteTag = document.querySelector("#sitetag");
 const generated = document.querySelector("#generated");
 const optionsButton = document.querySelector("#options");
+const wipeAndClose = document.querySelector("#wipe-and-close");
+const copyToClipboard = document.querySelector("#copy-to-clipboard");
 
 var get_active = browser.tabs.query({ active : true, currentWindow : true });
 get_active.then(function(tabs) {
@@ -25,4 +27,18 @@ masterKeyInput.oninput = function() {
 
 optionsButton.onclick = function() {
 	browser.runtime.openOptionsPage();
+};
+
+wipeAndClose.onclick = function() {
+	masterKeyInput.value = "";
+	generated.value = " ";
+	generated.select();
+	document.execCommand("Copy");
+	window.close();
+};
+
+copyToClipboard.onclick = function() {
+	console.log(generated.value);
+	generated.select();
+	document.execCommand("Copy");
 };
