@@ -8,6 +8,7 @@ const generated = document.querySelector("#generated");
 const optionsButton = document.querySelector("#options");
 const wipeAndClose = document.querySelector("#wipe-and-close");
 const copyToClipboard = document.querySelector("#copy-to-clipboard");
+const bumpButton = document.querySelector("#bump");
 
 var get_active = browser.tabs.query({ active : true, currentWindow : true });
 get_active.then(function(tabs) {
@@ -41,4 +42,8 @@ copyToClipboard.onclick = function() {
 	console.log(generated.value);
 	generated.select();
 	document.execCommand("Copy");
+};
+
+bumpButton.onclick = function() {
+
 };
