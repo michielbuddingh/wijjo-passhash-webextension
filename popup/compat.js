@@ -189,3 +189,17 @@ function convertToDigits(sInput, seed, lenOut)
         s += sInput.substring(i);
     return s;
 }
+
+function bumpSiteTag(siteTag)
+{
+	var tag = siteTag.replace(/^[ \t]*(.*)[ \t]*$/, "$1");    // redundant
+	if (tag)
+	{
+		var splitTag = tag.match(/^(.*):([0-9]+)?$/);
+		if (splitTag == null || splitTag.length < 3)
+			tag += ":1";
+		else
+			tag = splitTag[1] + ":" + (parseInt(splitTag[2]) + 1);
+	}
+	return tag;
+}

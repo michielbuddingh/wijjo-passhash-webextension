@@ -45,5 +45,5 @@ copyToClipboard.onclick = function() {
 };
 
 bumpButton.onclick = function() {
-
+	siteTag.value = bumpSiteTag(siteTag.value);
 };
