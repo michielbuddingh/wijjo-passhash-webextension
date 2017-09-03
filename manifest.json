@@ -10,7 +10,7 @@
     "manifest_version": 2,
 
     "version": "0.8",
-    "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/latest-download",
+    "homepage_url": "https://github.com/michielbuddingh/wijjo-passhash-webextension",
     "icons": {
 	"24": "icons/icon.svg",
 	"48": "icons/icon.svg",
