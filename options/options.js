@@ -12,18 +12,16 @@ const bothUpperAndLowerCaseLetters = document.querySelector("#both-upper-and-low
 const noSpecialCharacters = document.querySelector("#no-special-characters");
 const digitsOnly = document.querySelector("#digits-only");
 
-
 function restoreOptions() {
 	var loadOptions = browser.storage.local.get("passhash_options");
 	loadOptions.then((result) => {
-		console.log(result);
 		var version = result.passhash_options.optionsVersion || currentOptionsVersion;
 		generatedSize.value = result.passhash_options.generatedSize || 8;
-		atLeastOneDigit.value = result.passhash_options.atLeastOneDigit || false;
-		atLeastOnePunctuationCharacter.value = result.passhash_options.atLeastOnePunctuationCharacter || false;
-		bothUpperAndLowerCaseLetters.value = result.passhash_options.bothUpperAndLowerCaseLetters || false;
-		noSpecialCharacters.value = result.passhash_options.noSpecialCharacters || false;
-		digitsOnly.value = result.passhash_options.digitsOnly || false;
+		atLeastOneDigit.checked = result.passhash_options.atLeastOneDigit || true;
+		atLeastOnePunctuationCharacter.checked = result.passhash_options.atLeastOnePunctuationCharacter || true;
+		bothUpperAndLowerCaseLetters.checked = result.passhash_options.bothUpperAndLowerCaseLetters || true;
+		noSpecialCharacters.checked = result.passhash_options.noSpecialCharacters || false;
+		digitsOnly.checked = result.passhash_options.digitsOnly || false;
 	});
 }
 
@@ -31,12 +29,11 @@ function storeOptions() {
 	var options = {};
 	options.optionsVersion = currentOptionsVersion;
 	options.generatedSize = generatedSize.value;
-	options.atLeastOneDigit = atLeastOneDigit.value;
-	options.atLeastOnePunctuationCharacter = atLeastOnePunctuationCharacter.value;
-	options.bothUpperAndLowerCaseLetters = bothUpperAndLowerCaseLetters.value;
-	options.noSpecialCharacters = noSpecialCharacters.value;
-	options.digitsOnly = digitsOnly.value;
-	console.log(options);
+	options.atLeastOneDigit = atLeastOneDigit.checked;
+	options.atLeastOnePunctuationCharacter = atLeastOnePunctuationCharacter.checked;
+	options.bothUpperAndLowerCaseLetters = bothUpperAndLowerCaseLetters.checked;
+	options.noSpecialCharacters = noSpecialCharacters.checked;
+	options.digitsOnly = digitsOnly.checked;
 	browser.storage.local.set({
 		"passhash_options" : options
 	});
