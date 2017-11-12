@@ -28,7 +28,7 @@ get_active.then((tabs) => {
 	let storageKey = "domaindata#" + domain;
 	browser.storage.local.get(storageKey).then(
 		(results) => {
-			if (results[storageKey].siteTag) {
+			if (results[storageKey] && results[storageKey].siteTag) {
 				siteTag.value = results[storageKey].siteTag;
 			} else {
 				siteTag.value = domain;
