@@ -23,21 +23,37 @@ var digitsOnly = false;
 
 var get_active = browser.tabs.query({ active : true, currentWindow : true });
 
-get_active.then(function(tabs) {
-    siteTag.value = getDomain(tabs[0].url);
+get_active.then((tabs) => {
+	let domain = getDomain(tabs[0].url);
+	let storageKey = "domaindata#" + domain;
+	browser.storage.local.get(storageKey).then(
+		(domaindata) => {
+			console.log("stored domain data: ", domaindata);
+			if (domaindata.siteTag) {
+				siteTag.value = domaindata;
+			} else {
+				siteTag.value = domain;
+			}
+		},
+		(notstored) => {
+			console.log("no domain data stored for: ", domain);
+			siteTag.value = domain;
+		}
+	);
 });
 
 var loadOptions = browser.storage.local.get("passhash_options");
-loadOptions.then((result) => {
-	var version = result.passhash_options.optionsVersion;
-
-	generatedSize = result.passhash_options.generatedSize;
-	atLeastOneDigit = result.passhash_options.atLeastOneDigit;
-	atLeastOnePunctuationCharacter = result.passhash_options.atLeastOnePunctuationCharacter;
-	bothUpperAndLowerCaseLetters = result.passhash_options.bothUpperAndLowerCaseLetters;
-	noSpecialCharacters = result.passhash_options.noSpecialCharacters;
-	digitsOnly = result.passhash_options.digitsOnly;
+loadOptions.then((passhash_options) => {
+	let version = passhash_options.optionsVersion;
+	generatedSize.value = passhash_options.generatedSize || 8;
+	atLeastOneDigit.checked = passhash_options.atLeastOneDigit || true;
+	atLeastOnePunctuationCharacter.checked = passhash_options.atLeastOnePunctuationCharacter || true;
+	bothUpperAndLowerCaseLetters.checked = passhash_options.bothUpperAndLowerCaseLetters || true;
+	noSpecialCharacters.checked = passhash_options.noSpecialCharacters || false;
+	digitsOnly.checked = passhash_options.digitsOnly || false;
 });
+
+
 
 masterKeyInput.oninput = function() {
 	generated.value = generateHashWord(
@@ -71,6 +87,24 @@ copyToClipboard.onclick = function() {
 	document.execCommand("Copy");
 };
 
+var bumping = false;
+
 bumpButton.onclick = function() {
-	siteTag.value = bumpSiteTag(siteTag.value);
+	if (bumping) {
+		return;
+	}
+	bumping = true;
+	browser.tabs.query({ active : true, currentWindow : true }).then((tabs) => {
+		let domain = getDomain(tabs[0].url);
+		let storageKey = "domaindata#" + domain;
+		let bumped = bumpSiteTag(siteTag.value);
+		console.log("storing domain data for domain " + storageKey);
+		browser.storage.local.set({
+			storageKey : { "siteTag" : bumped }
+		}).then((success) => {
+			console.log("stored domain data for domain " + domain);
+			siteTag.value = bumped;
+			bumping = false;
+		});
+	});
 };

@@ -1,12 +1,12 @@
 {
-    "name": "password-hasher-compatible",
+    "name": "Legacy Password Hasher",
     "author" : "Michiel Buddingh",
 
     "developer" : {
 	"name" : "Michiel Buddingh",
 	"url": "https://github.com/michielbuddingh"
     },
-    "description": "Hashes passwords in a way that's identical to wijjo's passhash extension",
+    "description": "Hashes passwords in a way that's identical to wijjo's passhash extension.  Please be hesitant to use this method for new site passwords.",
     "manifest_version": 2,
 
     "version": "0.8",
