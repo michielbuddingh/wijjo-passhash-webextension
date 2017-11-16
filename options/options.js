@@ -15,13 +15,14 @@ const digitsOnly = document.querySelector("#digits-only");
 function restoreOptions() {
 	var loadOptions = browser.storage.local.get("passhash_options");
 	loadOptions.then((results) => {
-		var version = results.passhash_options.optionsVersion || currentOptionsVersion;
-		generatedSize.value = results.passhash_options.generatedSize || 8;
-		atLeastOneDigit.checked = results.passhash_options.atLeastOneDigit || true;
-		atLeastOnePunctuationCharacter.checked = results.passhash_options.atLeastOnePunctuationCharacter || true;
-		bothUpperAndLowerCaseLetters.checked = results.passhash_options.bothUpperAndLowerCaseLetters || true;
-		noSpecialCharacters.checked = results.passhash_options.noSpecialCharacters || false;
-		digitsOnly.checked = results.passhash_options.digitsOnly || false;
+		let passhash_options = results.passhash_options || {};
+		var version = passhash_options.optionsVersion || currentOptionsVersion;
+		generatedSize.value = passhash_options.generatedSize || 8;
+		atLeastOneDigit.checked = passhash_options.atLeastOneDigit || true;
+		atLeastOnePunctuationCharacter.checked = passhash_options.atLeastOnePunctuationCharacter || true;
+		bothUpperAndLowerCaseLetters.checked = passhash_options.bothUpperAndLowerCaseLetters || true;
+		noSpecialCharacters.checked = passhash_options.noSpecialCharacters || false;
+		digitsOnly.checked = passhash_options.digitsOnly || false;
 	});
 }
 

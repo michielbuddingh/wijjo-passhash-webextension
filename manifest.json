@@ -19,11 +19,12 @@
     },
 
     "content_security_policy" : "default-src 'self'",
-    "incognito" : "split",
+    "incognito" : "spanning",
 
     "permissions": [
 	"activeTab",
-	"storage"
+	"storage",
+	"clipboardWrite"
     ],
 
     "options_ui": {
