@@ -12,10 +12,7 @@
     "version": "0.8.1",
     "homepage_url": "https://github.com/michielbuddingh/wijjo-passhash-webextension",
     "icons": {
-	"24": "icons/icon.svg",
-	"48": "icons/icon.svg",
-	"96": "icons/icon.svg",
-	"128" : "icons/icon.svg"
+	"16": "icons/icon.svg"
     },
 
     "content_security_policy" : "default-src 'self'",
