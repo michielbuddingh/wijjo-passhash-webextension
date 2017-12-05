@@ -2,74 +2,119 @@
 /* License, v. 2.0. If a copy of the MPL was not distributed with this
 /* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/* constants sections */
 
-// input elements
+const settingsDefaults = {
+	optionsVersion : 1,
+	generatedSize : 8,
+	atLeastOneDigit : true,
+	atLeastOnePunctuationCharacter : true,
+	bothUpperAndLowerCaseLetters : true,
+	noSpecialCharacters : false,
+	digitsOnly : false
+};
+
+/* document elements section */
+
+// generator panel
+const generatorPanel = document.querySelector("#generator");
+
 const masterKeyInput = document.querySelector("#masterkey");
 const siteTag = document.querySelector("#sitetag");
 const generated = document.querySelector("#generated");
-const optionsButton = document.querySelector("#options");
+const siteSettingsButton = document.querySelector("#site-settings");
 const wipeAndClose = document.querySelector("#wipe-and-close");
 const copyToClipboard = document.querySelector("#copy-to-clipboard");
 const bumpButton = document.querySelector("#bump");
 
-// global variables
+// site settings panel
+const siteSettingsPanel = document.querySelector("#site_settings");
+const settingsSiteTag = document.querySelector("#settings-sitetag");
+const generatedSize = document.querySelector("#generated-size");
+const atLeastOneDigit = document.querySelector("#at-least-one-digit");
+const atLeastOnePunctuationCharacter = document.querySelector("#at-least-one-punctuation-character");
+const bothUpperAndLowerCaseLetters = document.querySelector("#both-upper-and-lower-case-letters");
+const noSpecialCharacters = document.querySelector("#no-special-characters");
+const digitsOnly = document.querySelector("#digits-only");
 
-var generatedSize = 8;
-var atLeastOneDigit = true;
-var atLeastOnePunctuationCharacter = true;
-var bothUpperAndLowerCaseLetters = true;
-var noSpecialCharacters = false;
-var digitsOnly = false;
+const goBackButton = document.querySelector("#go-back");
+const saveSiteOptionsButton = document.querySelector("#save-site-options");
 
-var get_active = browser.tabs.query({ active : true, currentWindow : true });
+/* end document elements section */
 
-get_active.then((tabs) => {
-	let domain = getDomain(tabs[0].url);
-	let storageKey = "domaindata#" + domain;
-	browser.storage.local.get(storageKey).then(
-		(results) => {
-			if (results[storageKey] && results[storageKey].siteTag) {
-				siteTag.value = results[storageKey].siteTag;
-			} else {
-				siteTag.value = domain;
-			}
-		},
-		(notstored) => {
-			siteTag.value = domain;
-		}
-	);
-});
+/* utility functions section */
 
-var loadOptions = browser.storage.local.get("passhash_options");
-loadOptions.then((results) => {
-	let passhash_options = results.passhash_options || {};
-	let version = passhash_options.optionsVersion;
-	generatedSize.value = passhash_options.generatedSize || 8;
-	atLeastOneDigit.checked = passhash_options.atLeastOneDigit || true;
-	atLeastOnePunctuationCharacter.checked = passhash_options.atLeastOnePunctuationCharacter || true;
-	bothUpperAndLowerCaseLetters.checked = passhash_options.bothUpperAndLowerCaseLetters || true;
-	noSpecialCharacters.checked = passhash_options.noSpecialCharacters || false;
-	digitsOnly.checked = passhash_options.digitsOnly || false;
-});
+function getSettingsFields() {
+	let options = {};
+	options.optionsVersion = settingsDefaults.optionsVersion;
+	options.siteTag = siteTag.value;
+	options.generatedSize = generatedSize.value;
+	options.atLeastOneDigit = atLeastOneDigit.checked;
+	options.atLeastOnePunctuationCharacter = atLeastOnePunctuationCharacter.checked;
+	options.bothUpperAndLowerCaseLetters = bothUpperAndLowerCaseLetters.checked;
+	options.noSpecialCharacters = noSpecialCharacters.checked;
+	options.digitsOnly = digitsOnly.checked;
+	return options;
+};
 
+function setSettingsFields(options) {
+	if ("siteTag" in options) {
+		siteTag.value = options.siteTag;
+		settingsSiteTag.value = options.siteTag;
+	}
+	if ("generatedSize" in options) {
+		generatedSize.value = options.generatedSize;
+	}
+	if ("atLeastOneDigit" in options) {
+		atLeastOneDigit.checked = options.atLeastOneDigit;
+	}
+	if ("atLeastOnePunctuationCharacter" in options) {
+		atLeastOnePunctuationCharacter.checked = options.atLeastOnePunctuationCharacter;
+	}
+	if ("bothUpperAndLowerCaseLetters" in options) {
+		bothUpperAndLowerCaseLetters.checked = options.bothUpperAndLowerCaseLetters;
+	}
+	if ("noSpecialCharacters" in options) {
+		noSpecialCharacters.checked = options.noSpecialCharacters;
+	}
+	if ("digitsOnly" in options) {
+		digitsOnly.checked = options.digitsOnly;
+	}
+}
 
+/* event handler section */
 
 masterKeyInput.oninput = function() {
 	generated.value = generateHashWord(
 		siteTag.value,
 		masterKeyInput.value,
-		generatedSize,
-		atLeastOneDigit,
-		atLeastOnePunctuationCharacter,
-		bothUpperAndLowerCaseLetters,
-		noSpecialCharacters,
-		digitsOnly
+		generatedSize.value,
+		atLeastOneDigit.checked,
+		atLeastOnePunctuationCharacter.checked,
+		bothUpperAndLowerCaseLetters.checked,
+		noSpecialCharacters.checked,
+		digitsOnly.checked
 	);
 };
 
+// keep siteTag and settingsSiteTag fields in sync
+siteTag.oninput = function() {
+	settingsSiteTag.value = siteTag.value;
+};
 
-optionsButton.onclick = function() {
-	browser.runtime.openOptionsPage();
+settingsSiteTag.oninput = function() {
+	siteTag.value = settingsSiteTag.value;
+};
+
+
+siteSettingsButton.onclick = function() {
+	generatorPanel.classList.add("notshown");
+	siteSettingsPanel.classList.remove("notshown");
+};
+
+goBackButton.onclick = function() {
+	generatorPanel.classList.remove("notshown");
+	siteSettingsPanel.classList.add("notshown");
 };
 
 wipeAndClose.onclick = function() {
@@ -85,22 +130,83 @@ copyToClipboard.onclick = function() {
 	document.execCommand("copy");
 };
 
-var bumping = false;
 
-bumpButton.onclick = function() {
-	if (bumping) {
+// saveLock prevents bumping and options saving from interleaving
+var saveLock = false;
+
+saveSiteOptionsButton.onclick = function() {
+	if (saveLock) {
 		return;
 	}
-	bumping = true;
+	saveLock = true;
+	let settings = getSettingsFields;
 	browser.tabs.query({ active : true, currentWindow : true }).then((tabs) => {
 		let domain = getDomain(tabs[0].url);
 		let storageKey = "domaindata#" + domain;
-		let siteTags = {};
-		let bumped = bumpSiteTag(siteTag.value);
-		siteTags[storageKey] = { "siteTag" : bumped };
-		browser.storage.local.set(siteTags).then((success) => {
-			siteTag.value = bumped;
-			bumping = false;
+		let settings = {};
+		settings[storageKey] = getSettingsFields();
+		browser.storage.local.set(settings).then((success) => {
+			saveLock = false;
+			generatorPanel.classList.remove("notshown");
+			siteSettingsPanel.classList.add("notshown");
 		});
 	});
 };
+
+bumpButton.onclick = function() {
+	if (saveLock) {
+		return;
+	}
+	saveLock = true;
+	browser.tabs.query({ active : true, currentWindow : true }).then((tabs) => {
+		let domain = getDomain(tabs[0].url);
+		let storageKey = "domaindata#" + domain;
+		let settings = {};
+		let bumped = bumpSiteTag(siteTag.value);
+		settings[storageKey] = getSettingsFields();
+		settings[storageKey].siteTag = bumped;
+		browser.storage.local.set(settings).then((success) => {
+			siteTag.value = bumped;
+			settingsSiteTag.value = bumped;
+			saveLock = false;
+		});
+	});
+};
+
+
+/* end event handler section */
+
+/* initialization section */
+
+var loadOptions = browser.storage.local.get("passhash_options");
+
+// load the general options for all sites
+loadOptions.then((results) => {
+	let passhash_options = Object.assign({}, settingsDefaults, results.passhash_options);
+	let version = passhash_options.optionsVersion;
+	setSettingsFields(passhash_options);
+});
+
+var get_active = browser.tabs.query({ active : true, currentWindow : true });
+
+get_active.then((tabs) => {
+	let domain = getDomain(tabs[0].url);
+	let storageKey = "domaindata#" + domain;
+	browser.storage.local.get(storageKey).then(
+		(results) => {
+			if (results[storageKey]) { // && results[storageKey].siteTag) {
+				results[storageKey].siteTag = results[storageKey]["siteTag"] || domain;
+				setSettingsFields(results[storageKey]);
+			} else {
+				siteTag.value = domain;
+				settingsSiteTag.value = domain;
+			}
+		},
+		(notstored) => {
+			siteTag.value = domain;
+			settingsSiteTag.value = siteTag.value;
+		}
+	);
+});
+
+/* end initialization section */

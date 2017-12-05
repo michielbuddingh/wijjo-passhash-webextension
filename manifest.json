@@ -9,7 +9,7 @@
     "description": "Hashes passwords in a way that's identical to wijjo's passhash extension.  Please be hesitant to use this method for new site passwords.",
     "manifest_version": 2,
 
-    "version": "0.8",
+    "version": "0.8.1",
     "homepage_url": "https://github.com/michielbuddingh/wijjo-passhash-webextension",
     "icons": {
 	"24": "icons/icon.svg",
