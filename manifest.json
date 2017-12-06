@@ -1,15 +1,15 @@
 {
-    "name": "Legacy Password Hasher",
+    "name": "Passhash Clipboard",
     "author" : "Michiel Buddingh",
 
     "developer" : {
 	"name" : "Michiel Buddingh",
 	"url": "https://github.com/michielbuddingh"
     },
-    "description": "Hashes passwords in a way that's identical to wijjo's passhash extension.  Please be hesitant to use this method for new site passwords.",
+    "description": "Simple version of wijjo's old passhash extension, which only interacts with the clipboard, so it needs minimal permissions.  Use this if you have a lot of old generated passwords, please don't use it for new sites.",
     "manifest_version": 2,
 
-    "version": "0.8.1",
+    "version": "1.0.0",
     "homepage_url": "https://github.com/michielbuddingh/wijjo-passhash-webextension",
     "icons": {
 	"16": "icons/icon.svg"
