@@ -29,6 +29,7 @@ const bumpButton = document.querySelector("#bump");
 
 // site settings panel
 const siteSettingsPanel = document.querySelector("#site_settings");
+const siteSettingsForm = document.querySelector("#settings-form");
 const settingsSiteTag = document.querySelector("#settings-sitetag");
 const generatedSize = document.querySelector("#generated-size");
 const atLeastOneDigit = document.querySelector("#at-least-one-digit");
@@ -84,7 +85,7 @@ function setSettingsFields(options) {
 
 /* event handler section */
 
-masterKeyInput.oninput = function() {
+masterKeyInput.oninput = siteSettingsForm.onchange = function() {
 	generated.value = generateHashWord(
 		siteTag.value,
 		masterKeyInput.value,
